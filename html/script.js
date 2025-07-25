@@ -58,13 +58,12 @@ function startTimerBar(durationMin, onComplete) {
     const startTime = Date.now();
     const interval = setInterval(() => {
         if(gotWrong && attempts > 0){
-            durationMin = durationMin - 17000; 
+            durationMin = durationMin - (durationMin/5); 
             gotWrong = false; 
 
         }
         console.log("Attempts left: \n", attempts);
         if(attempts <= 0){
-            console.log("No attempts left, clearing interval");
             clearInterval(interval);
             if(typeof onComplete === "function") {
                 onComplete({correct: false});
@@ -72,7 +71,6 @@ function startTimerBar(durationMin, onComplete) {
         }
         const elapsedTime = Date.now() - startTime;
         const percent = Math.max(0, 100 - (elapsedTime / durationMin) * 100);
-        //console.log("Elapsed time: ", elapsedTime, "Percent: ", percent, " tonumber:", Number(percent));
         progressBar.style.width = percent + "%";
 
         if(percent <= 0){
@@ -80,10 +78,10 @@ function startTimerBar(durationMin, onComplete) {
             if(typeof onComplete === "function") {
                 onComplete({correct: false});
             }
+            cleaningUI();
         }
 
         if(found){
-            console.log("Found the correct code, clearing interval");
             clearInterval(interval);
             if(typeof onComplete === "function") {
                 onComplete({correct: true});
@@ -155,7 +153,7 @@ window.addEventListener("message", function (event) {
             document.getElementById("attempts").textContent = `${attempts}`;
             document.getElementById("randomCode").textContent = randomCode;
             populateCharacterMapping();
-            startTimerBar(60000, fetchToLua);
+            startTimerBar(10000, fetchToLua);
             document.getElementById("miniui-container").style.display = "block";
             uiVisible = true; 
         
