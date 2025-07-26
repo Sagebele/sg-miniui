@@ -11,7 +11,18 @@ files {
 
 shared_scripts {
     '@gb-core/shared.lua', -- Loads QBCore shared functions
-
+    '@qb-core/shared/items.lua', -- Loads QBCore items
 }
 
-client_script 'client.lua'
+client_scripts{
+    'client.lua'
+}
+
+server_scripts{
+    'server.lua'
+}
+
+dependencies{
+    'qb-core',
+    'qb-inventory',
+}

@@ -57,12 +57,20 @@ function startTimerBar(durationMin, onComplete) {
     //console.log("Starting timer bar with duration: \n", progressBar.style.width);
     const startTime = Date.now();
     const interval = setInterval(() => {
+        if(found){
+            clearInterval(interval);
+            if(typeof onComplete === "function") {
+                onComplete({correct: true});
+            }
+            return;
+        }
+
         if(gotWrong && attempts > 0){
             durationMin = durationMin - (durationMin/5); 
             gotWrong = false; 
 
         }
-        console.log("Attempts left: \n", attempts);
+        // console.log("Attempts left: \n", attempts);
         if(attempts <= 0){
             clearInterval(interval);
             if(typeof onComplete === "function") {
@@ -81,12 +89,7 @@ function startTimerBar(durationMin, onComplete) {
             cleaningUI();
         }
 
-        if(found){
-            clearInterval(interval);
-            if(typeof onComplete === "function") {
-                onComplete({correct: true});
-            }
-        }
+        
     }, 100);
 }
 
