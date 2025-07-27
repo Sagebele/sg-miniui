@@ -1,2 +1,7 @@
 # sg-miniui
-Minigames used in Fivem scripting using Javascript/HTML/CSS/LUA
+Minigame used in Fivem scripting using Javascript/HTML/CSS/LUA
+
+
+The game gets triggered either by typing /miniui or by using an item
+
+It is a decryptive style minigame with a table to find the answer
