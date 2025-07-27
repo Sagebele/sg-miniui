@@ -1,14 +1,15 @@
-const Config = [
-  {letter:"a", number:'1'}, {letter:"b", number:'2'}, {letter:"c", number:'3'},
-  {letter:"d", number:'4'}, {letter:"e", number:'5'}, {letter:"f", number:'6'},
-  {letter:"g", number:'7'}, {letter:"h", number:'8'}, {letter:"i", number:'9'},
-  {letter:"j", number: '10'}, {letter:"k", number: '11'}, {letter:"l", number: '12'},
-  {letter:"m", number: '13'}, {letter:"n", number: '14'}, {letter:"o", number: '15'},
-  {letter:"p", number: '16'}, {letter:"q", number: '17'}, {letter:"r", number: '18'},
-  {letter:"s", number: '19'}, {letter:"t", number: '20'}, {letter:"u", number: '21'},
-  {letter:"v", number: '22'}, {letter:"w", number: '23'}, {letter:"x", number: '24'},
-  {letter:"y", number: '25'}, {letter:"z", number: '26'}
-];
+// const Config = [
+//   {letter:"a", number:'1'}, {letter:"b", number:'2'}, {letter:"c", number:'3'},
+//   {letter:"d", number:'4'}, {letter:"e", number:'5'}, {letter:"f", number:'6'},
+//   {letter:"g", number:'7'}, {letter:"h", number:'8'}, {letter:"i", number:'9'},
+//   {letter:"j", number: '10'}, {letter:"k", number: '11'}, {letter:"l", number: '12'},
+//   {letter:"m", number: '13'}, {letter:"n", number: '14'}, {letter:"o", number: '15'},
+//   {letter:"p", number: '16'}, {letter:"q", number: '17'}, {letter:"r", number: '18'},
+//   {letter:"s", number: '19'}, {letter:"t", number: '20'}, {letter:"u", number: '21'},
+//   {letter:"v", number: '22'}, {letter:"w", number: '23'}, {letter:"x", number: '24'},
+//   {letter:"y", number: '25'}, {letter:"z", number: '26'}
+// ];
+let config ;
 let uiVisible = false;
 let reverseCode = "";
 let attempts = 3;
@@ -20,8 +21,8 @@ function getRandomLetterOrNumber() {
     let entry;
     let randomCode = "";
     for (let i = 0; i < 3; i++) {
-        randomIndex = Math.round(Math.random() * (Config.length-1));
-        entry = Config[randomIndex];
+        randomIndex = Math.round(Math.random() * (config.length-1));
+        entry = config[randomIndex];
         if(Math.random() < 0.5){
             randomCode = randomCode + entry.letter 
             reverseCode = reverseCode + entry.number;
@@ -41,11 +42,11 @@ function getRandomLetterOrNumber() {
 
 function populateCharacterMapping() {
     const characterMapping = document.getElementsByClassName("character-mapping")[0];
-    Config.forEach((entry,i) => {
+    config.forEach((entry,i) => {
         const div = document.createElement("div")
         div.classList.add("mapping-item");
         div.textContent = `${entry.letter} = ${entry.number} , `;
-        if (i === Config.length - 1) {
+        if (i === config.length - 1) {
             div.textContent = div.textContent.slice(0, -2); // Remove the last comma and space
         }
         characterMapping.appendChild(div);
@@ -149,7 +150,9 @@ document.addEventListener("keydown", function (event) {
 });
 
 window.addEventListener("message", function (event) {
-    if(event.data.type === "ui" && !uiVisible) {
+
+    config = event.data.config.table ;
+    if(event.data.type === "ui" && !uiVisible){
         if(event.data.status === true) {
             let randomCode = getRandomLetterOrNumber();
             attempts = 3;found = false;

@@ -1,11 +1,10 @@
 
 local QBCore = exports['qb-core']:GetCoreObject()
+local item = Config.item 
 
 
-
-QBCore.Functions.CreateUseableItem('karta',function(source)
+QBCore.Functions.CreateUseableItem(item,function(source)
     local player = QBCore.Functions.GetPlayer(source)
-    print(player)
     if player then
         TriggerClientEvent('sg-miniui:client:openUi', source)
     else
@@ -20,8 +19,8 @@ RegisterNetEvent("uponClosing", function()
 
     local player = QBCore.Functions.GetPlayer(src)
     if player then
-        if(player.Functions.RemoveItem('karta', 1)) then
-        print("Item karta removed from player: " .. tostring(player))
+        if(player.Functions.RemoveItem(item, 1)) then
+            print("Item karta removed from player: " .. tostring(player))
         else
             print("Failed to remove item karta from player: " .. tostring(player))
         end

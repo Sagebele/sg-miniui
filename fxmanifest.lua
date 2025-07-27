@@ -12,6 +12,7 @@ files {
 shared_scripts {
     '@gb-core/shared.lua', -- Loads QBCore shared functions
     '@qb-core/shared/items.lua', -- Loads QBCore items
+    'config.lua'
 }
 
 client_scripts{
