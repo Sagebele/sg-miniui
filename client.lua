@@ -1,5 +1,5 @@
 local QBCore = exports['qb-core']:GetCoreObject()
-print("Loaded Config:", Config)
+print("Loaded Config:", Config, "\n",  Config.details.timer, "\n", Config.details.attempts)
 
 
 
@@ -13,19 +13,17 @@ RegisterNetEvent("sg-miniui:client:openUi", function()
 
 end)
 
-
-
-
 RegisterCommand('miniui', function()
+
     SetNuiFocus(true, true)
     SendNUIMessage({
         type = "ui",
         status = true,
         config = Config
     })
-       
+end, false)
 
-end)
+
 
 
 RegisterNUICallback("closeUI", function(data, cb)

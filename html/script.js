@@ -1,18 +1,8 @@
-// const Config = [
-//   {letter:"a", number:'1'}, {letter:"b", number:'2'}, {letter:"c", number:'3'},
-//   {letter:"d", number:'4'}, {letter:"e", number:'5'}, {letter:"f", number:'6'},
-//   {letter:"g", number:'7'}, {letter:"h", number:'8'}, {letter:"i", number:'9'},
-//   {letter:"j", number: '10'}, {letter:"k", number: '11'}, {letter:"l", number: '12'},
-//   {letter:"m", number: '13'}, {letter:"n", number: '14'}, {letter:"o", number: '15'},
-//   {letter:"p", number: '16'}, {letter:"q", number: '17'}, {letter:"r", number: '18'},
-//   {letter:"s", number: '19'}, {letter:"t", number: '20'}, {letter:"u", number: '21'},
-//   {letter:"v", number: '22'}, {letter:"w", number: '23'}, {letter:"x", number: '24'},
-//   {letter:"y", number: '25'}, {letter:"z", number: '26'}
-// ];
+
 let config ;
 let uiVisible = false;
 let reverseCode = "";
-let attempts = 3;
+let attempts;
 let gotWrong = false
 let found = false;
 
@@ -55,7 +45,6 @@ function populateCharacterMapping() {
 
 function startTimerBar(durationMin, onComplete) {
     const progressBar = document.getElementsByClassName("timer-bar")[0];
-    //console.log("Starting timer bar with duration: \n", progressBar.style.width);
     const startTime = Date.now();
     const interval = setInterval(() => {
         if(found){
@@ -63,7 +52,6 @@ function startTimerBar(durationMin, onComplete) {
             if(typeof onComplete === "function") {
                 onComplete({correct: true});
             }
-            return;
         }
 
         if(gotWrong && attempts > 0){
@@ -71,7 +59,6 @@ function startTimerBar(durationMin, onComplete) {
             gotWrong = false; 
 
         }
-        // console.log("Attempts left: \n", attempts);
         if(attempts <= 0){
             clearInterval(interval);
             if(typeof onComplete === "function") {
@@ -107,6 +94,7 @@ function fetchToLua(data){
 function cleaningUI(){
     const characterMapping = document.getElementsByClassName("character-mapping")[0];
     const inputField = document.getElementsByClassName("nice-input")[0];
+    document.getElementById("miniui-container").style.display = "none";
     inputField.value = ""; // Clear the input field
     characterMapping.innerHTML = ""; // Clear the character mapping
     reverseCode = ""; // Reset the reverseCode
@@ -116,16 +104,12 @@ function cleaningUI(){
 
 document.addEventListener("keydown", function (event) {
     if(event.key === "Enter"){
-        console.log("reverseCode: ", reverseCode);
+        //console.log("reverseCode: ", reverseCode, "\n");
 
         const input = document.getElementsByClassName("nice-input")[0].value;
-        console.log("Enter key pressed, checking input ", input);
         if(input == reverseCode){
             found = true;
-            console.log("Correct input, closing UI");
             cleaningUI();
-            document.getElementById("miniui-container").style.display = "none";
-            console.log("UI closed and cleaned up");
         }   
         else{
             attempts--;
@@ -136,7 +120,6 @@ document.addEventListener("keydown", function (event) {
             else{
                 document.getElementsByClassName("nice-input")[0].value = "";
                 document.getElementById("randomCode").textContent = getRandomLetterOrNumber();
-
                 document.getElementById("attempts").textContent = `${attempts}`;
             }
         }
@@ -144,22 +127,28 @@ document.addEventListener("keydown", function (event) {
     else if(event.key === "Escape") {
         attempts = 0;
         cleaningUI();
-        document.getElementById("miniui-container").style.display = "none";
     }
     
 });
 
 window.addEventListener("message", function (event) {
 
-    config = event.data.config.table ;
     if(event.data.type === "ui" && !uiVisible){
         if(event.data.status === true) {
+            if (!event.data.config || !event.data.config.table || !event.data.config.details.attempts || !event.data.config.details.timer) {
+                console.error("Missing config or config.table from event data:", event.data);
+                return;
+            }
+
+            config = event.data.config.table;
+
             let randomCode = getRandomLetterOrNumber();
-            attempts = 3;found = false;
+            attempts = event.data.config.details.attempts;
+            found = false;
             document.getElementById("attempts").textContent = `${attempts}`;
             document.getElementById("randomCode").textContent = randomCode;
             populateCharacterMapping();
-            startTimerBar(10000, fetchToLua);
+            startTimerBar(event.data.config.details.timer, fetchToLua);
             document.getElementById("miniui-container").style.display = "block";
             uiVisible = true; 
         
@@ -173,13 +162,3 @@ window.addEventListener("message", function (event) {
 
 
 
-
-// document.getElementById("closeBtn").addEventListener("click", function () {
-//   fetch(`https://${GetParentResourceName()}/closeUI`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json; charset=UTF-8",
-//     },
-//     body: JSON.stringify({}),
-//   });
-// });

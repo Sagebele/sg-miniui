@@ -1,6 +1,6 @@
-
+-- sg-miniui/server.lua
 local QBCore = exports['qb-core']:GetCoreObject()
-local item = Config.item 
+local item = Config.details.item 
 
 
 QBCore.Functions.CreateUseableItem(item,function(source)

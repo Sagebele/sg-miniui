@@ -1,5 +1,6 @@
 Config = Config or {}
 
+
 Config.table = { 
     {letter="a", number='1'},
     {letter="b", number='2'},
@@ -29,5 +30,10 @@ Config.table = {
     {letter="z", number= '26'}
 }
 
+Config.details = {}
+Config.details = {
+    item = 'karta', -- The item used to open the UI, can be changed if needed
+    timer = 10000, -- The time in milliseconds for the timer bar to run
+    attempts = 4, -- The number of attempts the player has to enter the correct code
+}
 
-Config.item = 'karta' -- The item used to open the UI, can be changed if needed
